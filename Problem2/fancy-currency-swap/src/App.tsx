@@ -1,44 +1,19 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import Header from './components/Header'
-import SwapForm from './components/SwapForm'
+import './App.css'
+import useFetchPrices from './hooks/useFetchPrices'
+import ExchangeForm from './components/ExchangeForm'
 
 const App = () => {
-    const [prices, setPrices] = useState<any[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
+    const { prices, loading } = useFetchPrices()
 
-    useEffect(() => {
-        const fetchPrices = async () => {
-            try {
-                const { data } = await axios.get(
-                    'https://interview.switcheo.com/prices.json'
-                )
-                const uniquePrices = Array.from(
-                    new Map(
-                        data.map((item: any) => [item.currency, item])
-                    ).values()
-                )
-                setPrices(uniquePrices)
-            } catch (error) {
-                console.error('Error fetching prices', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchPrices()
-    }, [])
+    if (loading) {
+        return (
+            <div className="text-center mt-20 text-xl">Loading prices...</div>
+        )
+    }
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
-            <Header />
-            <div className="w-full max-w-lg p-4">
-                {loading ? (
-                    <div className="text-xl text-blue-500">Loading...</div>
-                ) : (
-                    <SwapForm prices={prices} />
-                )}
-            </div>
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <ExchangeForm prices={prices} />
         </div>
     )
 }
