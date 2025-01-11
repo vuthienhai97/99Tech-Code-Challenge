@@ -15,7 +15,8 @@ const WalletRow: React.FC<WalletRowProps> = ({
 }) => {
     return (
         <div className={className}>
-            <span>Amount: {formattedAmount}</span>
+            <span>Amount: {amount}</span>
+            <span>Amount formatted: {formattedAmount}</span>
             <span>USD Value: ${usdValue.toFixed(2)}</span>
         </div>
     )
